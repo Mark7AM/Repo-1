@@ -5,12 +5,136 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <title>Vanilla JavaScript App</title>
+  <title>Azure Activity Log Guide</title>
 </head>
 
 <body>
   <main>
-    <h1>Vanilla JavaScript App</h1>
+    <header class="hero">
+      <p class="eyebrow">Azure monitoring</p>
+      <h1>Azure Activity Log: What matters most</h1>
+      <p class="subtitle">
+        Azure Activity Log records control-plane events such as resource creation, updates,
+        deletes, permission changes, and policy actions. It helps you answer: what changed,
+        when it happened, who initiated it, and whether it succeeded.
+      </p>
+    </header>
+
+    <section class="info-grid">
+      <article class="card">
+        <h2>1. Time and sequence</h2>
+        <p>
+          The timestamp tells you when the event happened. Review the order of events to spot
+          suspicious patterns such as a VM being created, followed by a policy change or a
+          deallocation.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>2. Resource and scope</h2>
+        <p>
+          Look at the resource group, subscription, and resource name. This shows exactly what
+          was affected and whether the change occurred at the app, network, or infrastructure level.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>3. Operation details</h2>
+        <p>
+          The operation name tells you the specific action, such as <strong>Microsoft.Compute/virtualMachines/write</strong>
+          or <strong>Microsoft.KeyVault/vaults/delete</strong>. This is the clearest clue about the change.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>4. Caller and identity</h2>
+        <p>
+          Check who initiated the action. Azure records the caller identity, including whether it was
+          a user, service principal, managed identity, or automated system process.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>5. Status and result</h2>
+        <p>
+          The status shows whether the action was successful, failed, or started. Failed operations may
+          indicate permission issues, quota limits, or misconfigured resources that need follow-up.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>6. Correlation and audit trail</h2>
+        <p>
+          Correlation IDs and activity IDs help you connect a series of related events across Azure
+          services so you can trace the full lifecycle of a request or security investigation.
+        </p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Typical Azure activity log event</h2>
+      <pre><code>{
+  "timestamp": "2026-10-10T14:22:10Z",
+  "operationName": "Microsoft.Compute/virtualMachines/start/action",
+  "resourceGroup": "rg-prod-app",
+  "resourceId": "/subscriptions/abc/resourceGroups/rg-prod-app/providers/Microsoft.Compute/virtualMachines/app-vm-01",
+  "caller": "user@contoso.com",
+  "status": {
+    "value": "Succeeded",
+    "localizedValue": "Succeeded"
+  },
+  "correlationId": "7abf7d34-2a12-4b6d-9a87-e7a05d66b829"
+}</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>How to interpret an Azure event</h2>
+      <ol class="steps">
+        <li><span>Check the time</span> to confirm when the action occurred.</li>
+        <li><span>Identify the resource</span> and subscription or resource group it touched.</li>
+        <li><span>Read the operation</span> to understand the exact action taken.</li>
+        <li><span>Review the caller</span> to determine whether the activity was expected.</li>
+        <li><span>Confirm the result</span> and investigate any failed or unusual events.</li>
+      </ol>
+    </section>
+
+    <section class="table-section">
+      <h2>Important fields to review</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Why it matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Event timestamp</td>
+            <td>Shows when the change occurred</td>
+          </tr>
+          <tr>
+            <td>Operation name</td>
+            <td>Identifies the specific Azure action</td>
+          </tr>
+          <tr>
+            <td>Resource ID</td>
+            <td>Pinpoints the exact resource involved</td>
+          </tr>
+          <tr>
+            <td>Caller</td>
+            <td>Shows who or what initiated the change</td>
+          </tr>
+          <tr>
+            <td>Status / result</td>
+            <td>Indicates success or failure</td>
+          </tr>
+          <tr>
+            <td>Correlation ID</td>
+            <td>Links related activity together</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </main>
 </body>
 
